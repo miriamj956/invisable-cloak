@@ -48,6 +48,24 @@ while(raw_video.isOpened()):
     #to expand the image and make it not blurry 
     mask1 = cv2.morphologyEx(mask1, cv2.MORPH_OPEN, np.ones((3,3), np.uint8), iterations=2)
     mask1 = cv2.dilate(mask1, np.ones((3,3), np.uint8), iterations=1)
+
+    #this basically means that all the red is being saved in the mask 1 variable and so mask 2 will carry all the leftover(everything thats not red)
+    mask2 = cv2.bitwise_not(mask1)
+
+    #masking process 
+    #bitwise is used to change one value to another(basically if all the values of the computer (binary code) are 0 it will make it into 1 which is the opposite.)
+    #it is being used this code to change the value of red(idk what numebr that is)but to change it from red into nothing
+    res1 = cv2.bitwise_and(background, background, mask = mask1)
+    res2 = cv2.bitwise_and(img, img, mask = mask2)
+
+    #0 - brightness of image
+    final_output = cv2.addWeighted(res1, 1, res2, 1, 0)
+    cv2.imshow("Invisable Man", final_output)
+
+    k = cv2.waitKey(10)
+    #27 = ESC
+    if k == 27:
+        break 
     
 
 
